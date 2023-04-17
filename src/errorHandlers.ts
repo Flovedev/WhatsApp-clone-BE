@@ -1,9 +1,16 @@
 import mongoose from "mongoose";
 import { ErrorRequestHandler } from "express";
+import { validationError } from "./interfaces/IError";
+
 
 export const badRequestHandler: ErrorRequestHandler = (err, req, res, next) => {
   if (err.status === 400 || err instanceof mongoose.Error.ValidationError) {
-    res.status(400).send({ message: err.message });
+    if (err.errorsList) {
+      res.status(400).send({ message: err.message, errorsList: err.errorsList.map((e: validationError) => e.msg) })
+
+    } else {
+      res.status(400).send({ message: err.message })
+    }
   } else {
     next(err);
   }

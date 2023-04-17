@@ -1,8 +1,9 @@
 import { Model, Document } from "mongoose"
 
 interface User {
-    name: string
-    email: string
+    username: string
+    email: string,
+    password: string,
     avatar?: string
 }
 

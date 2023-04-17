@@ -6,10 +6,10 @@ const { Schema, model } = mongoose
 
 const UsersSchema = new Schema(
     {
-        name: { type: String, required: true },
+        username: { type: String, required: true },
         email: { type: String, required: true },
         password: { type: String, required: false },
-        avatar: { type: String, default: "" },
+        avatar: { type: String, default: "https://www.transparentpng.com/thumb/user/blue-male-user-profile-transparent-png-2lbgMx.png" },
     },
     { timestamps: true }
 )
@@ -25,15 +25,15 @@ UsersSchema.pre("save", async function () {
     }
 })
 
-// UsersSchema.methods.toJSON = function () {
-//     const currentUserDocument = this
-//     const currentUser = currentUserDocument.toObject()
-//     delete currentUser.password
-//     delete currentUser.createdAt
-//     delete currentUser.updatedAt
-//     delete currentUser.__v
-//     return currentUser
-// }
+UsersSchema.methods.toJSON = function () {
+    const currentUserDocument = this
+    const currentUser = currentUserDocument.toObject()
+    delete currentUser.password
+    delete currentUser.createdAt
+    delete currentUser.updatedAt
+    delete currentUser.__v
+    return currentUser
+}
 
 UsersSchema.static("checkCredentials", async function (email, plainPW) {
 

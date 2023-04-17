@@ -1,6 +1,6 @@
 import passportGoogle from "passport-google-oauth20";
 import UsersModel from "../../api/users/model";
-import { createAccessToken } from "./tools.js";
+import { createAccessToken } from "./tools";
 
 const GoogleStrategy = passportGoogle.Strategy;
 
@@ -47,7 +47,7 @@ const googleStrategy = new GoogleStrategy(
       }
     } catch (error) {
       // 4. In case of errors we gonna catch'em and handle them
-      passportNext(error);
+      passportNext(error as string);
     }
   }
 );

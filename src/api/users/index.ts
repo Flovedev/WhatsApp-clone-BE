@@ -64,4 +64,14 @@ usersRouter.get("/me", JWTAuthMiddleware, async (req: any, res, next) => {
   }
 })
 
+
+usersRouter.put("/me", JWTAuthMiddleware, async (req: any, res, next) => {
+  try {
+    const updatedUser = await UsersModel.findByIdAndUpdate(req.user!._id, req.body, { new: true, runValidators: true })
+    res.send(updatedUser)
+  } catch (error) {
+    next(error)
+  }
+})
+
 export default usersRouter;

@@ -1,9 +1,9 @@
-import { Request } from "express"
+import { Request } from "express";
 
 export interface TokenPayload {
-    _id: string
+  _id: string;
 }
 
 export interface UserRequest extends Request {
-    user?: TokenPayload
+  user?: TokenPayload;
 }

@@ -18,12 +18,12 @@ usersRouter.get(
 usersRouter.get(
   "/googleRedirect",
   passport.authenticate("google", { session: false }),
-  (req: Request, res: Response, next: NextFunction) => {
+  (req: any, res: Response, next: NextFunction) => {
     try {
       //   res.redirect(
       //     `${process.env.FE_URL}?accessToken=${req.user!.accessToken}`
-      res.send(req.user!.accessToken);
       //   );
+      res.send(req.user!.accessToken);
     } catch (error) {
       next(error);
     }

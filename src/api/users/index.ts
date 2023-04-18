@@ -7,6 +7,10 @@ import { UserRequest } from "../../interfaces/IAuth";
 import { checkUserSchema, generateBadRequest } from "./validation";
 import { Request, Response, NextFunction } from "express";
 import passport from "passport";
+import multer from "multer";
+import { v2 as cloudinary } from 'cloudinary';
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import { Params } from "express-serve-static-core";
 
 const usersRouter = Express.Router();
 
@@ -75,6 +79,28 @@ usersRouter.put("/me", JWTAuthMiddleware, async (req: any, res, next) => {
 })
 
 
+const cloudinaryUploader = multer({
+  storage: new CloudinaryStorage({
+    cloudinary,
+    params: {
+      folder: "fs0522/whatsapp-avatars"
+    } as Params
+  })
+}).single('avatar')
+
+
+usersRouter.post("/me/avatar", JWTAuthMiddleware, cloudinaryUploader, async (req: any, res, next) => {
+  try {
+
+    const user = await UsersModel.findByIdAndUpdate(req.user!._id, { ...req.body, avatar: req.file.path }, { new: true, runValidators: true })
+    // avatar: req.file.path
+    res.send({ user })
+  } catch (error) {
+    next(error)
+  }
+})
+
+
 
 usersRouter.get("/:id", JWTAuthMiddleware, async (req, res, next) => {
   try {
@@ -88,6 +114,5 @@ usersRouter.get("/:id", JWTAuthMiddleware, async (req, res, next) => {
     next(error)
   }
 })
-
 
 export default usersRouter;

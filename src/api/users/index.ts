@@ -1,4 +1,4 @@
-import Express from "express";
+import Express, { RequestHandler } from "express";
 import createError from "http-errors";
 import UsersModel from "./model";
 import { JWTAuthMiddleware } from "../../lib/auth/jwt";
@@ -49,6 +49,16 @@ usersRouter.get("/", async (req, res, next) => {
   try {
     const users = await UsersModel.find()
     res.send(users)
+  } catch (error) {
+    next(error)
+  }
+})
+
+
+usersRouter.get("/me", JWTAuthMiddleware, async (req: any, res, next) => {
+  try {
+    const user = await UsersModel.findById(req.user!._id)
+    res.send(user)
   } catch (error) {
     next(error)
   }

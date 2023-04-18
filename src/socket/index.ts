@@ -22,9 +22,9 @@ export const newConnectionHandler = (socket: Socket) => {
     socket.broadcast.emit("newMessage", message);
   });
 
-  // socket.on("disconnect", () => {
-  //   onlineUsers = onlineUsers.filter((user) => user.socketId !== socket.id);
+  socket.on("disconnect", () => {
+    onlineUsers = onlineUsers.filter((user) => user.socketId !== socket.id);
 
-  //   socket.broadcast.emit("updateOnlineUsersList", onlineUsers);
-  // });
+    socket.broadcast.emit("updateOnlineUsersList", onlineUsers);
+  });
 };

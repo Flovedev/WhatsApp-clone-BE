@@ -11,6 +11,7 @@ import {
 } from "./errorHandlers";
 import { newConnectionHandler } from "./socket/index";
 import usersRouter from "./api/users";
+import chatsRouter from "./api/chats";
 import passport from "passport";
 import googleStrategy from "./lib/auth/googleOauth";
 
@@ -32,6 +33,7 @@ expressServer.use(passport.initialize());
 
 //ENDPOINTS
 expressServer.use("/users", usersRouter);
+expressServer.use("/chats", chatsRouter);
 
 //ERROR HANDLERS
 expressServer.use(badRequestHandler);

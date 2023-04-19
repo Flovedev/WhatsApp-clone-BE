@@ -1,5 +1,7 @@
 import { Socket } from "socket.io";
 import { UserIo } from "../interfaces/ISocketIo";
+import MessageModel from "../api/message/model";
+import ChatModel from "../api/chats/model";
 
 let onlineUsers = <UserIo[]>[];
 
@@ -18,8 +20,26 @@ export const newConnectionHandler = (socket: Socket) => {
     socket.broadcast.emit("updateOnlineUserList", onlineUsers);
   });
 
-  socket.on("sendMessage", (message) => {
+  socket.on("sendMessage", async (message) => {
     socket.broadcast.emit("newMessage", message);
+    console.log(message);
+
+    let newMessage = {
+      sender: message.message.sender,
+      content: {
+        text: message.message.text,
+      },
+      createdAt: message.message.createdAt,
+    };
+    console.log(newMessage);
+
+    const updatedChat = await ChatModel.findByIdAndUpdate(
+      message.message.chatId,
+      { $push: { messages: newMessage } },
+      { new: true, runValidators: true }
+    );
+
+    await updatedChat?.save();
   });
 
   socket.on("disconnect", () => {

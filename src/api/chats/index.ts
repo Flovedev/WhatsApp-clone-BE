@@ -1,4 +1,6 @@
 import express from "express";
+import mongoose from "mongoose";
+import { ObjectId } from "mongodb";
 import { Request, Response, NextFunction } from "express";
 import ChatsSchema from "./model";
 import ChatsModel from "./model";
@@ -18,13 +20,27 @@ chatsRouter.get(
         );
       }
 
+      // const all = await ChatsModel.find().populate("members");
+      // console.log(all);
+      // const findChats = all.filter((chat) =>
+      //   chat.members.some((user: any) => {
+      //     user === req.params.userId;
+      //   })
+      // );
+      // res.send(findChats);
       const findChats = await ChatsModel.find({
-        users: { $in: [req.params.userId] },
+        members: {
+          $elemMatch: { _id: new mongoose.Types.ObjectId(req.params.userId) },
+        },
       });
+
       if (findChats.length > 0) {
         res.send(findChats);
       } else {
-        res.send({ message: "No chats created with this user yet!" });
+        res.send({
+          success: false,
+          message: "No chats created with this user yet!",
+        });
       }
     } catch (error) {
       next(error);
@@ -34,14 +50,14 @@ chatsRouter.get(
 
 chatsRouter.post("/", async (req, res, next) => {
   try {
-    const users = req.body.users;
+    const members = req.body.members;
 
-    if (!Array.isArray(users) || users.length !== 2) {
+    if (!Array.isArray(members) || members.length !== 2) {
       next(createHttpError(400, "users array must contain 2 usersId"));
     }
 
-    const user1 = users[0];
-    const user2 = users[1];
+    const user1 = members[0];
+    const user2 = members[1];
 
     const checkForFirstId = await UsersModel.findById(user1);
     if (!checkForFirstId) {
@@ -57,14 +73,14 @@ chatsRouter.post("/", async (req, res, next) => {
     }
 
     const checkForChat = await ChatsModel.findOne({
-      users: { $all: [user1, user2] },
+      members: { $all: [user1, user2] },
     });
 
     if (checkForChat) {
       res.status(400).send({ message: "Chat already exists" });
     } else {
       const chat = new ChatsModel({
-        users: [user1, user2],
+        members: [checkForFirstId, checkForSecondtId],
         messages: [],
       });
       const savedChat = await chat.save();

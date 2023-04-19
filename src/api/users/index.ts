@@ -26,9 +26,9 @@ usersRouter.get(
   (req: any, res: Response, next: NextFunction) => {
     try {
       res.redirect(
-        `${process.env.FE_URL}/?accessToken=${req.user!.accessToken}`
+        `${process.env.FE_URL}/main/?accessToken=${req.user!.accessToken}`
       );
-      //res.send(req.user!.accessToken);
+      // res.send(req.user!.accessToken);
     } catch (error) {
       next(error);
     }
@@ -59,7 +59,7 @@ usersRouter.post(
       if (user) {
         const payload = { _id: user._id };
         const accessToken = await createAccessToken(payload);
-        res.send({ accessToken });
+        res.send({ accessToken, user });
       } else {
         next(createHttpError(401, "Credentials are not valid."));
       }

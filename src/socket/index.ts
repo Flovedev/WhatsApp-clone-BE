@@ -8,18 +8,24 @@ export const newConnectionHandler = (socket: Socket) => {
 
   socket.emit("welcome", { message: `Hello, ${socket.id}` });
 
-  socket.on("setUsername", (payload) => {
-    console.log(payload);
+  // socket.on("setUsername", (payload) => {
+  //   console.log(payload);
 
-    onlineUsers.push({ username: payload.username, socketId: socket.id });
+  //   onlineUsers.push({ username: payload.username, socketId: socket.id });
 
-    socket.emit("loggedIn", onlineUsers);
+  //   socket.emit("loggedIn", onlineUsers);
 
-    socket.broadcast.emit("updateOnlineUserList", onlineUsers);
+  //   socket.broadcast.emit("updateOnlineUserList", onlineUsers);
+  // });
+
+  socket.on("joinRoom", (roomName) => {
+    console.log(`${socket.id} joined room "${roomName}"`);
+    socket.join(roomName);
   });
 
   socket.on("sendMessage", (message) => {
-    socket.broadcast.emit("newMessage", message);
+    console.log(message)
+    socket.to("room").emit("newMessage", message);
   });
 
   // socket.on("disconnect", () => {

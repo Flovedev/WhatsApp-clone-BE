@@ -10,19 +10,27 @@ export const newConnectionHandler = (socket: Socket) => {
 
   socket.emit("welcome", { message: `Hello, ${socket.id}` });
 
-  socket.on("setUsername", (payload) => {
-    console.log(payload);
+  // socket.on("setUsername", (payload) => {
+  //   console.log(payload);
 
-    onlineUsers.push({ username: payload.username, socketId: socket.id });
+  //   onlineUsers.push({ username: payload.username, socketId: socket.id });
 
-    socket.emit("loggedIn", onlineUsers);
+  //   socket.emit("loggedIn", onlineUsers);
 
-    socket.broadcast.emit("updateOnlineUserList", onlineUsers);
+  //   socket.broadcast.emit("updateOnlineUserList", onlineUsers);
+  // });
+
+  socket.on("joinRoom", (roomName) => {
+    socket.join(roomName);
+    socket.data.roomName = roomName;
   });
 
   socket.on("sendMessage", async (message) => {
-    socket.broadcast.emit("newMessage", message);
+    // socket.broadcast.emit("newMessage", message);
     console.log(message);
+
+    const roomName = socket.data.roomName;
+    socket.to(roomName).emit("newMessage", message);
 
     let newMessage = {
       sender: message.message.sender,
@@ -31,7 +39,7 @@ export const newConnectionHandler = (socket: Socket) => {
       },
       createdAt: message.message.createdAt,
     };
-    console.log(newMessage);
+    // console.log(newMessage);
 
     const updatedChat = await ChatModel.findByIdAndUpdate(
       message.message.chatId,

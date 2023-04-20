@@ -9,6 +9,15 @@ import createHttpError from "http-errors";
 
 const chatsRouter = express.Router();
 
+chatsRouter.get("/singleChat/:chatId", async (req, res, next) => {
+  try {
+    const foundChat = await ChatsModel.findById(req.params.chatId);
+    res.send(foundChat);
+  } catch (error) {
+    next(error);
+  }
+});
+
 chatsRouter.get(
   "/:userId",
   async (req: Request, res: Response, next: NextFunction) => {

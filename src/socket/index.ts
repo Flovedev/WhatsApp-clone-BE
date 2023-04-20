@@ -34,9 +34,7 @@ export const newConnectionHandler = (socket: Socket) => {
 
     let newMessage = {
       sender: message.message.sender,
-      content: {
-        text: message.message.text,
-      },
+      text: message.message.text,
       createdAt: message.message.createdAt,
     };
     // console.log(newMessage);

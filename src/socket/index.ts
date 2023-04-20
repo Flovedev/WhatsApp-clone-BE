@@ -17,20 +17,21 @@ export const newConnectionHandler = (socket: Socket) => {
 
   //   socket.broadcast.emit("updateOnlineUserList", onlineUsers);
   // });
-
   socket.on("joinRoom", (roomName) => {
     console.log(`${socket.id} joined room "${roomName}"`);
+    socket.data.roomName = roomName;
     socket.join(roomName);
   });
 
   socket.on("sendMessage", (message) => {
     console.log(message)
-    socket.to("room").emit("newMessage", message);
+    const roomName = socket.data.roomName;
+
+    socket.to(roomName).emit("newMessage", message);
   });
 
-  // socket.on("disconnect", () => {
-  //   onlineUsers = onlineUsers.filter((user) => user.socketId !== socket.id);
-
-  //   socket.broadcast.emit("updateOnlineUsersList", onlineUsers);
-  // });
+  socket.on("disconnect", () => {
+    onlineUsers = onlineUsers.filter((user) => user.socketId !== socket.id);
+    socket.broadcast.emit("updateOnlineUsersList", onlineUsers);
+  });
 };

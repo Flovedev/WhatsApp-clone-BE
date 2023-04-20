@@ -5,10 +5,8 @@ const { Schema, model } = mongoose;
 const MessageSchema = new Schema(
   {
     sender: { type: String, required: true },
-    content: {
-      text: { type: String },
-      media: { type: String },
-    },
+    text: { type: String, require: false },
+    media: { type: String, requier: false },
   },
   { timestamps: true }
 );

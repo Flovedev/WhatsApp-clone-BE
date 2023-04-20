@@ -25,9 +25,8 @@ usersRouter.get(
   passport.authenticate("google", { session: false }),
   (req: any, res: Response, next: NextFunction) => {
     try {
-      res.redirect(
-        `${process.env.FE_URL}/main/?accessToken=${req.user!.accessToken}`
-      );
+      res.cookie("accessToken", req.user!.accessToken);
+      res.redirect(`${process.env.FE_URL}/main`);
       // res.send(req.user!.accessToken);
     } catch (error) {
       next(error);

@@ -36,6 +36,7 @@ export const newConnectionHandler = (socket: Socket) => {
       sender: message.message.sender,
       text: message.message.text,
       createdAt: message.message.createdAt,
+      chatId: roomName,
     };
     // console.log(newMessage);
 

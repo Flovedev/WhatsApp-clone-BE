@@ -25,13 +25,7 @@ const userSchema: Schema<"isString" | "in"> = {
     isString: {
       errorMessage: "Password is a mandatory field and needs to be a string!",
     },
-  },
-  info: {
-    in: "body" as Location,
-    isString: {
-      errorMessage: "Info is a mandatory field and needs to be a string!",
-    },
-  },
+  }
 };
 
 export const checkUserSchema = checkSchema(userSchema);

@@ -9,7 +9,7 @@ const UsersSchema = new Schema(
     username: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: false },
-    info: { type: String, default: "I am using what's app!" },
+    info: { type: String, default: "Hey there! I am using WhatsApp." },
     avatar: {
       type: String,
       default:

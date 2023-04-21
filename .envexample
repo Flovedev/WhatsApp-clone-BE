@@ -1,0 +1,18 @@
+*********** CONNECTION ***********
+PORT =
+FE_URL =
+API_URL =
+
+*********** DATA BASE ***********
+MONGO_TEST_URL =
+MONGO_URL =
+
+*********** TOKEN ***********
+SECRET_KEY = 
+
+*********** OAuth ***********
+GOOGLE_SECRET = 
+GOOGLE_ID = 
+ 
+*********** Cloudinary ***********
+CLOUDINARY_URL = 

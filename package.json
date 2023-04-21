@@ -2,11 +2,12 @@
   "name": "whatsapp-clone-be",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "test": "jest --watchAll",
     "dev": "nodemon -r dotenv/config ./src/index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "start": "node ./src/server.ts"
   },
   "repository": {
     "type": "git",
